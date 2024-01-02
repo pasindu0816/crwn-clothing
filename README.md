@@ -1,4 +1,6 @@
 # Getting Started with Create React App
+![crwnclothing-ss](https://github.com/pasindu0816/crwn-clothing/assets/78838765/69e1e507-3634-4acb-b089-02cf3e4fbec7)
+
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
