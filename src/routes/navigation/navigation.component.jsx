@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 import CartIcon from "../../components/cart-icon/cart-icon.component";
@@ -16,32 +16,42 @@ import {NavigationContainer, LogoContainer, NavLinks, NavLink} from './navigatio
 const Navigation = () => {
   const currentUser = useSelector(selectCurrentUser);
   const isCartOpen = useSelector(selectIsCartOpen);
-  
-    return (
-      <Fragment>
-        <NavigationContainer>
-          <LogoContainer to='/'>
-            <CrwnLogo className="logo" />
-          </LogoContainer>
-          
-          <NavLinks>
-            <NavLink to='/shop'>
-                SHOP
-            </NavLink>
-            {currentUser ? (
-              <NavLink as='span' onClick={signOutUser}>SIGN OUT</NavLink>
-            ) : ( 
-            <NavLink to='/auth'>
-                SIGN IN
-            </NavLink>
-            )}
-            <CartIcon />
-          </NavLinks>
-          {isCartOpen && <CartDropdown />}     
-        </NavigationContainer>
-        <Outlet />
-      </Fragment>
-    )
+  const navigate = useNavigate(); // Initialize useNavigate hook
+
+  const handleSignOut = async () => {
+    try {
+      await signOutUser();
+      navigate('/'); // Redirect to home after sign out
+    } catch (error) {
+      console.log('Error signing out: ', error);
+    }
+  };
+
+  return (
+    <Fragment>
+      <NavigationContainer>
+        <LogoContainer to='/'>
+          <CrwnLogo className="logo" />
+        </LogoContainer>
+        
+        <NavLinks>
+          <NavLink to='/shop'>
+              SHOP
+          </NavLink>
+          {currentUser ? (
+            <NavLink as='span' onClick={handleSignOut}>SIGN OUT</NavLink>
+          ) : ( 
+          <NavLink to='/auth'>
+              SIGN IN
+          </NavLink>
+          )}
+          <CartIcon />
+        </NavLinks>
+        {isCartOpen && <CartDropdown />}     
+      </NavigationContainer>
+      <Outlet />
+    </Fragment>
+  );
 }
 
 export default Navigation;

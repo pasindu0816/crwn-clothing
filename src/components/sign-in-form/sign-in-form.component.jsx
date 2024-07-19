@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate hook
 
 import FormInput from "../form-input/form-input.component";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
@@ -19,6 +20,7 @@ const defaultFormFields = {
 const SignInForm = () => {
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
+    const navigate = useNavigate(); // Initialize useNavigate hook
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
@@ -26,15 +28,17 @@ const SignInForm = () => {
 
     const signInWithGoogle = async() => {
         await signInWithGooglePopup();
+        navigate('/shop'); // Redirect to shop after Google sign in
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
-            const {user} = await signInAuthUserWithEmailAndPassword(email, password);
+            const { user } = await signInAuthUserWithEmailAndPassword(email, password);
             
             resetFormFields();
+            navigate('/shop'); // Redirect to shop after email/password sign in
         
         } catch (error) {
             if (error.code === "auth/invalid-login-credentials") {
@@ -48,9 +52,7 @@ const SignInForm = () => {
     const handleChange = (event) => {
         const { name, value } = event.target;
 
-        setFormFields({...formFields, [name]: value});
-
-
+        setFormFields({ ...formFields, [name]: value });
     };
 
     return (
